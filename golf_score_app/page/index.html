@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Golf Score App - Index Page</title>
+</head>
+<body>
+    <h1>Hello, Azure Django App!!</h1>
+    <p>This is the index page for the test app.</p>
+
+    <button id="captureButton">Go to Capture Page</button>
+
+    <script>
+        document.getElementById('captureButton').addEventListener('click', function() {
+            window.location.href = "{% url 'capture' %}";  // Django URL 패턴 이름을 사용하여 URL 생성
+        });
+    </script>
+</body>
+</html>
