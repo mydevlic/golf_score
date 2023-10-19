@@ -1,40 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>카메라 미리보기</title>
-</head>
-<body>
-    <h1>카메라 미리보기</h1>
-    <video id="cameraPreview" autoplay></video>
-    <button id="startCamera">카메라 시작</button>
+<style>
+    #container {
+        margin: 0px auto;
+        width: 500px;
+        height: 375px;
+        border: 10px #333 solid;
+    }
+    #videoElement {
+        width: 500px;
+        height: 375px;
+        background-color: #666;
+    }
+    </style>
+    </head>
+     
+    <body>
+    <div id="container">
+        <video autoplay="true" id="videoElement">
+        
+        </video>
+    </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const cameraPreview = document.getElementById('cameraPreview');
-            const startCameraButton = document.getElementById('startCamera');
-            let stream;
-
-            // 카메라 미리보기 시작
-            startCameraButton.addEventListener('click', function () {
-                if (!stream) {
-                    // getUserMedia를 사용하여 카메라 액세스 권한 요청
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                        .then(function (cameraStream) {
-                            stream = cameraStream;
-                            // 비디오 스트림을 비디오 요소에 연결
-                            cameraPreview.srcObject = cameraStream;
-                        })
-                        .catch(function (error) {
-                            console.error('카메라 액세스 오류:', error);
-                        });
-                }
-                // 사용자가 촬영 버튼을 누를 때까지 카메라 미리보기 지속
-            });
-
-            // 촬영 버튼 이벤트 리스너 (사용자가 촬영 버튼을 누를 때 실행)
-            // 촬영 버튼을 누를 때 원하는 작업을 수행하세요.
+    var video = document.querySelector("#videoElement");
+     
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+          video.srcObject = stream;
+        })
+        .catch(function (err0r) {
+          console.log("Something went wrong!");
         });
-
-
+    }
     </script>
-</body>
-</html>
+    
