@@ -15,7 +15,8 @@
         const canvas = document.getElementById('canvas');
         const photo = document.getElementById('photo');
 
-        navigator.mediaDevices.getUserMedia({ video: true })
+        // navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({ video: {facingMode: 'environment'}})
             .then(stream => {
                 camera.srcObject = stream;
             })
