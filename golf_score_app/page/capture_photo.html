@@ -1,41 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>카메라 영상 실시간 렌더링</title>
+    <title>HTML Media Capture</title>
 </head>
 <body>
-    <video id="camera" width="640" height="480" autoplay></video>
-    <canvas id="canvas" width="640" height="480"></canvas>
-
+    <h1>HTML Media Capture</h1>
+    <input type="file" accept="image/*" capture="environment" id="mediaCaptureInput">
+    <img id="capturedImage" style="display: none;">
     <script>
-        const video = document.getElementById('camera');
-        const canvas = document.getElementById('canvas');
-        const context = canvas.getContext('2d');
+        document.addEventListener('DOMContentLoaded', function () {
+            const mediaCaptureInput = document.getElementById('mediaCaptureInput');
+            const capturedImage = document.getElementById('capturedImage');
 
-        // 미디어 스트림 가져오기 (카메라)
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function (stream) {
-                video.srcObject = stream;
-            })
-            .catch(function (error) {
-                console.error('카메라 접근에 실패했습니다: ' + error);
-            });
-
-        // 비디오 프레임을 캔버스에 렌더링
-        video.addEventListener('play', function () {
-            const width = video.videoWidth;
-            const height = video.videoHeight;
-
-            // 캔버스에 비디오 프레임을 반복적으로 그립니다.
-            function renderFrame() {
-                if (video.paused || video.ended) {
-                    return;
+            // 파일 입력 필드 변경 이벤트 리스너
+            mediaCaptureInput.addEventListener('change', function (event) {
+                const files = event.target.files;
+                if (files && files.length > 0) {
+                    const selectedFile = files[0];
+                    if (selectedFile.type.match('image.*')) {
+                        const reader = new FileReader();
+                        reader.onload = function () {
+                            capturedImage.src = reader.result;
+                            capturedImage.style.display = 'block';
+                        };
+                        reader.readAsDataURL(selectedFile);
+                    } else {
+                        alert('이미지 파일을 선택해주세요.');
+                    }
                 }
-                context.drawImage(video, 0, 0, width, height);
-                requestAnimationFrame(renderFrame);
-            }
-
-            video.addEventListener('play', renderFrame);
+            });
         });
     </script>
 </body>
