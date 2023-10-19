@@ -1,31 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>웹캠 활용</title>
-    <style>
-        video {
-            width: 100%;
-            max-width: 640px;
-        }
-    </style>
-
+    <title>카메라 영상 실시간 렌더링</title>
 </head>
 <body>
-    <h1>웹캠 활용</h1>
-    <video id="webcamVideo" autoplay></video>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        const webcamVideo = document.getElementById('webcamVideo');
+    <video id="camera" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
 
-        // getUserMedia를 사용하여 웹캠 액세스 권한 요청
+    <script>
+        const video = document.getElementById('camera');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+
+        // 미디어 스트림 가져오기 (카메라)
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
-                // 비디오 스트림을 비디오 요소에 연결
-                webcamVideo.srcObject = stream;
+                video.srcObject = stream;
             })
             .catch(function (error) {
-                console.error('웹캠 액세스 오류:', error);
+                console.error('카메라 접근에 실패했습니다: ' + error);
             });
+
+        // 비디오 프레임을 캔버스에 렌더링
+        video.addEventListener('play', function () {
+            const width = video.videoWidth;
+            const height = video.videoHeight;
+
+            // 캔버스에 비디오 프레임을 반복적으로 그립니다.
+            function renderFrame() {
+                if (video.paused || video.ended) {
+                    return;
+                }
+                context.drawImage(video, 0, 0, width, height);
+                requestAnimationFrame(renderFrame);
+            }
+
+            video.addEventListener('play', renderFrame);
         });
     </script>
 </body>
