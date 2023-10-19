@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>카메라 영상</title>
+    <title>카메라 미리보기</title>
 </head>
 <body>
-    <h1>카메라 영상</h1>
-    <video id="cameraFeed" autoplay></video>
-    <button id="startButton">카메라 시작</button>
+    <h1>카메라 미리보기</h1>
+    <video id="cameraPreview" autoplay></video>
+    <button id="startCamera">카메라 시작</button>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const cameraFeed = document.getElementById('cameraFeed');
-            const startButton = document.getElementById('startButton');
-        
-            startButton.addEventListener('click', function () {
-                // getUserMedia를 사용하여 카메라 액세스 권한 요청
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function (stream) {
-                        cameraFeed.srcObject = stream;
-                    })
-                    .catch(function (error) {
-                        console.error('카메라 액세스 오류:', error);
-                    });
+            const cameraPreview = document.getElementById('cameraPreview');
+            const startCameraButton = document.getElementById('startCamera');
+            let stream;
+
+            // 카메라 미리보기 시작
+            startCameraButton.addEventListener('click', function () {
+                if (!stream) {
+                    // getUserMedia를 사용하여 카메라 액세스 권한 요청
+                    navigator.mediaDevices.getUserMedia({ video: true })
+                        .then(function (cameraStream) {
+                            stream = cameraStream;
+                            // 비디오 스트림을 비디오 요소에 연결
+                            cameraPreview.srcObject = cameraStream;
+                        })
+                        .catch(function (error) {
+                            console.error('카메라 액세스 오류:', error);
+                        });
+                }
+                // 사용자가 촬영 버튼을 누를 때까지 카메라 미리보기 지속
             });
+
+            // 촬영 버튼 이벤트 리스너 (사용자가 촬영 버튼을 누를 때 실행)
+            // 촬영 버튼을 누를 때 원하는 작업을 수행하세요.
         });
+
+
     </script>
 </body>
 </html>
