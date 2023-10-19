@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>사진 촬영</title>
+</head>
+<body>
+    <video id="camera" width="100%" autoplay></video>
+    <button id="capture">사진 촬영</button>
+    <canvas id="canvas" style="display:block;"></canvas>
+    <img id="photo" src="" alt="사진">
+
+    <script>
+        const camera = document.getElementById('camera');
+        const captureButton = document.getElementById('capture');
+        const canvas = document.getElementById('canvas');
+        const photo = document.getElementById('photo');
+
+        // navigator.mediaDevices.getUserMedia({ video: true })
+        navigator.mediaDevices.getUserMedia({ video: {facingMode: 'environment'}})
+            .then(stream => {
+                camera.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('카메라 접근에 실패했습니다: ' + err);
+            });
+
+        captureButton.addEventListener('click', () => {
+            canvas.width = camera.clientWidth;
+            canvas.height = camera.clientHeight;
+            canvas.getContext('2d').drawImage(camera, 0, 0, camera.clientWidth, camera.clientHeight);
+            photo.src = canvas.toDataURL('image/jpeg');
+        });
+    </script>
+</body>
+</html>
