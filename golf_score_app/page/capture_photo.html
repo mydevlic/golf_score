@@ -1,21 +1,19 @@
 <!DOCTYPE html>
+<script src="https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js"></script>
 <html>
 <head>
     <title>HTML Media Capture</title>
-    <style>
-        img {
-        max-width: 100%;
-        }
-    </style>
 </head>
 <body>
     <h1>HTML Media Capture</h1>
     <input type="file" accept="image/*" capture="environment" id="mediaCaptureInput">
     <img id="capturedImage" style="display: none;">
+    <div id="resultText"></div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const mediaCaptureInput = document.getElementById('mediaCaptureInput');
             const capturedImage = document.getElementById('capturedImage');
+            const resultText = document.getElementById('resultText');
 
             // 파일 입력 필드 변경 이벤트 리스너
             mediaCaptureInput.addEventListener('change', function (event) {
@@ -27,6 +25,7 @@
                         reader.onload = function () {
                             capturedImage.src = reader.result;
                             capturedImage.style.display = 'block';
+                            recognizeTextFromImage(capturedImage);
                         };
                         reader.readAsDataURL(selectedFile);
                     } else {
@@ -34,6 +33,17 @@
                     }
                 }
             });
+
+            // 이미지에서 텍스트 인식 함수
+            function recognizeTextFromImage(imageElement) {
+                Tesseract.recognize(
+                    imageElement,
+                    'eng', // 언어 설정 (영어)
+                    { logger: info => console.log(info) } // 로그 설정
+                ).then(({ data: { text } }) => {
+                    resultText.textContent = text;
+                });
+            }
         });
     </script>
 </body>
