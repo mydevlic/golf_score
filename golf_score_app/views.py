@@ -7,4 +7,7 @@ def index(request):
     return render(request, 'page/index.html')
 
 def capture(request):
-    return render(request, 'page/capture_photo.html')
+    #return render(request, 'page/capture_photo.html')
+    #return render(request, 'page/imagetextdetector.html')
+    return render(request, 'page/tesseract.html')
+    
